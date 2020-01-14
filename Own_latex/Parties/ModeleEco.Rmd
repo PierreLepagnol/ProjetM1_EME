@@ -69,7 +69,6 @@ biens_stat_des_Chapelle=select(biens_stat_des,-c(`Musée d’Orsay`))
 ## Selection du meilleur 2ème Modèle 
 ### Procédure
 Nous allons donc fitter 3 sous-modèle et selectionner le sous-modèle ayant la vairable la plus significative.
-
 ### Fit Sous-modèle 1 : ```Moyenne_ORSAY_CHAPELLE```
 ```{r}
 X=select(biens_stat_des_Moyenne,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
@@ -82,21 +81,27 @@ X=select(biens_stat_des_ORSAY,-c(prix,maison,arrondissement,nb_photo,distance_un
 lm_2_2=lm(Y~.,data=X)  
 summary(lm_2_2)
 ```
-
-
-
 ### Fit Sous-modèle 3 : ```Chapelle Notre-Dame de la Médaille miraculeuse```
 ```{r}
 X=select(biens_stat_des_Chapelle,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
 lm_2_3=lm(Y~.,data=X)  
 summary(lm_2_3)
 ```
-On Remarque à l'issu du fitting de ces sous-modèles que la variable la plus pertinante est ```Musée d'Orsay```
+On remarque à l'issu du fitting de ces sous-modèles que la variable la plus pertinante est ```Musée d'Orsay```. Nous 	sélectionnons donc ce sous-modèle.
 
+
+# Raffinons le modèle
+```{r echo=FALSE}
+X=select(biens_stat_des_ORSAY,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+```
+
+Nous allons supprimer les variables qui ont une p-value très élevée. C'est à dire : ```Cathédrale Notre-Dame de Paris```,```Centre Pompidou```,```distance_station_1```
 
 ```{r}
-# On supprime les variables qui ont une p-value très élevée
+X=select(X,-c(`Centre Pompidou`,`Cathédrale Notre-Dame de Paris`))
 
+lm_3=lm(Y~.,data=X)  
+summary(lm_3)
 #summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
 
 #Ensuite on ne garde que celles qui sont représentatives au seuil de 5%
