@@ -1,0 +1,372 @@
+---
+title: "immobilier_paris"
+author: "Maxime Philippot Pierre Lepagnol"
+date: "11/01/2020"
+output: pdf_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(AER)
+library(car)
+library(sandwich)
+library(tseries)
+library(car)
+library(dynlm)
+library(orcutt)
+library(lmtest)
+library(gmm)
+library(nloptr)
+library(stringr)
+library(dplyr)
+library(geosphere)
+library(ggplot2)
+
+```
+
+## Création du data.frame "station" sous R
+
+### Lecture du jeu de données et sélection
+
+Le fichier "positions-geographiques-des-stations-du-reseau-ratp.csv" provient du jeu de données de la RATP. Ce fichier contient les coordonnées GPS et l'addresse des stations de bus, métro, RER, Tramway de la RATP. 
+
+Pour accéder au jeu de données il suffit de le télécharger à l'addresse :
+
+https://dataratp2.opendatasoft.com/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/table/?disjunctive.stop_name
+
+```{r}
+
+station<-read.csv("positions-geographiques-des-stations-du-reseau-ratp.csv",header= T,sep=";")
+
+# Ajout du code postal au data.frame et ordonner par code_postal
+
+station<-cbind(station,code_postal=str_sub(as.character(station[,3]),-5))
+station<-station[order(station$code_postal),]
+station$code_postal<-as.numeric(as.character(station$code_postal))
+
+# Mise en forme UTF-8 pour rectifier l'erreur d'écriture des stations avec des accents (les stations de métro)
+
+fwrite(station,"station_UTF-8.csv")
+station <- fread("station_UTF-8.csv",encoding = "UTF-8")
+
+# Séparation de Longitude et Latitude en deux colonnes
+
+setDT(station)[, c("Latitude","Longitude") := tstrsplit(Coordinates, ",")]
+
+#Sélection uniquement des stations de Paris et ordonner par nom de station
+
+station<- station[station$code_postal < 75121,]
+station<-station[order(station$Name),]
+```
+
+### Nettoyage du jeu de données
+
+On a remarqué que certaines stations avaient des addresses identiques, on a donc comparé les données Longitude/Latitude. Ces données ce sont avérées redondantes également. On a décidé de supprimer les stations qui possédaient plusieurs points GPS identique pour une même addresse, autrement dit une addresse est maintenant associée à un point GPS unique.
+
+```{r}
+# Suppression des doublons Longitude/Latitude dans le data.frame
+
+station<-station[!duplicated(station[,c(3,6:7)]),]
+```
+
+Notre jeu de données qui provient de la RATP n'écrit pas de la même façon une station de métro et une station de bus. "Alésia" est une station de métro. "ALESIA - DIDOT" est un arrêt de bus. Pour uniformiser le nom des stations il faut donc supprimer les accents, puis toutes les mettre en majuscule.
+
+```{r}
+
+# Supprime les accents des stations de métro de notre jeu de données 
+
+for (i in seq(1, length(station$Name))){
+  station$Name[i]<-iconv(station$Name[i],from="UTF-8",to="ASCII//TRANSLIT")
+}
+
+# Mise en forme de toutes les stations (en majuscule) 
+
+station$Name<-str_to_upper(station$Name)
+
+```
+
+On a supprimé également les lignes pour lesquelles les addresses étaient identiques pour ne garder qu'un point GPS par addresse.
+
+On a remarqué qu'une station de métro pouvait avoir des données identiques d'addresse mais un point GPS différent. Une explication serait que les bouches de métro sont référencées et donc pour une station de métro et une addresse nous obtenons plusieurs points GPS différents (ce n'est qu'une hypothèse). On a décidé de garder qu'une information par station de métro.
+
+
+```{r}
+# Sélection d'une coordonnées GPS par addresse.
+
+station<-station[!duplicated(station[,3]),]
+station<-station[,-4] #on enlève "Coordinates" qui est maintenant en deux colonnes "Longitude" et "Latitude"
+ 
+# On garde une ligne par station de métro en faisant la moyenne de Longitude/Latitude lorsqu'il y en a plusieurs
+
+station<-station%>%
+  group_by(Name)%>%summarise(longitude=mean(as.numeric(Longitude)),latitude=mean(as.numeric(Latitude)))%>%select(Name,longitude,latitude)
+
+```
+
+
+## Création du data.frame "biens" sous R
+
+### Lecture du jeu de données et Sélection
+
+le fichier "result_python_annonces.csv" provient du scrapping des annonces effectué à l'aide de Python. Pour chaque bien (ou presque), nous avons de l'informations sur trois stations à proximité (métro,RER)
+
+```{r}
+biens<-read.csv("result_python_annonces.csv",header= T,sep=",")
+
+# Mise en forme UTF-8 pour rectifier l'erreur d'écriture des stations avec des accents
+
+fwrite(biens,"biens_UTF-8.csv")
+biens <- fread("biens_UTF-8.csv",encoding = "UTF-8")
+
+# Supprime les accents des stations de chaque biens pour uniformiser avec la même écriture que le data.frame "station"
+
+for (i in seq(1, length(biens$transport.0))){
+  biens$transport.0[i]<-iconv(biens$transport.0[i],from="UTF-8",to="ASCII//TRANSLIT")
+  biens$transport.1[i]<-iconv(biens$transport.1[i],from="UTF-8",to="ASCII//TRANSLIT")
+  biens$transport.2[i]<-iconv(biens$transport.2[i],from="UTF-8",to="ASCII//TRANSLIT")
+}
+
+
+# Mise en forme de toutes les stations (en majuscule)
+
+biens$transport.0<-str_to_upper(biens$transport.0)
+biens$transport.1<-str_to_upper(biens$transport.1)
+biens$transport.2<-str_to_upper(biens$transport.2)
+
+# Donne l'ensemble des stations présentes dans le jeu de données "biens"
+
+transport<-unique(c(biens$transport.0,biens$transport.1,biens$transport.2))
+
+# On ordonne par le nom de la première station renseignée, puis on a décidé de supprimer les biens pour lesquels on avait pas d'information sur les stations à proximité (soit 5 biens)
+
+biens<-biens[order(biens$transport.0),]
+biens<-biens[-c(1,2,3,4,5),]
+
+```
+
+On a remarqué un bien sans description du nombre de chambre. A l'aide de l'url renseigné dans le data.frame nous avons visité la page "https://www.pap.fr/annonces/appartement-paris-16e-75016-r430400259" correspondant au bien.
+
+Si on regarde la photo du plan sur l'annonce on remarque que le bien peut avoir 1 ou 2 chambres selon les besoins/envies de l'acheteur, on a décidé que ce bien possédais qu'une chambre à l'achat et que la salle à manger pouvait se transformer en chambre par la suite.
+
+```{r}
+#url du bien
+
+subset(biens,is.na(biens$nb_chambres))$url
+
+# On associe 1 chambre à ce bien
+
+biens$nb_chambres[is.na(biens$nb_chambres)]<-1
+```
+
+### Prise en compte des stations sans référencement
+
+Nous avons vu très rapidement que certaines stations référencées dans l'annonce ne correspondaient à aucune station du data.frame "station"
+
+```{r}
+# On cherche donc les stations du data.frame "biens" qui n'ont pas de valeurs dans le data.frame "station"
+
+sort(setdiff(transport,unique(station$Name)))#on a 30 stations sur 198 qui n'ont pas de correspondance
+
+#length(transport) #transport qui est l'ensemble des stations référencées dans les 124 biens
+```
+Pour corriger ce problème, nous avons créé le fichier "result_r_station.csv" pour connaître le nom de toutes les stations de Paris ordonnées.  On a associé manuellement les nouveaux noms de station en mettant en évidence deux causes de ce problème.
+
+La première cause venait d'une écriture différente dans les deux data.frame. Par exemple,"JAVEL - ANDRE CITROEN"  est devenu "JAVEL-ANDRE-CITROEN", "FRANKLIN D. ROOSEVELT" est devenu "FRANKLIN-ROOSEVELT" etc...
+
+Ensuite, dans l'autre cas la cause venait d'un manque d'information sur les stations RER du jeu de données de la RATP. On a décidé d'associer la station de bus la plus proche de la station de RER pour garder une bonne information. Par exemple, "PONT DE L'ALMA" est devenu "BOSQUET - RAPP", "TELEGRAPHE" est devenu "PELLEPORT - BELLEVILLE", "STADE CHARLETY" est devenu "STADE CHARLETY - PORTE DE GENTILLY" etc...
+
+```{r}
+
+# Création du fichier des stations pour trouver le nom exact des stations de métro, ou dans l'autre cas connaitre le nom de la station de bus la plus proche de la station de RER. 
+
+#write.csv(station, file = "result_r_station.csv") 
+
+biens[biens=="ALEXANDRE DUMAS"]<-"ALEXANDRE-DUMAS"
+biens[biens=="AVENUE HENRI MARTIN"]<-"OCTAVE FEUILLET"
+biens[biens=="BUTTES CHAUMONT"]<-"BUTTES-CHAUMONT"
+biens[biens=="CHAMPS-ELYSEES - CLEMENCEAU (GRAND PALAIS)"]<-"CHAMPS-ELYSEES - CLEMENCEAU"
+biens[biens=="CHATEAU-LANDON"]<-"CHATEAU LANDON"
+biens[biens=="CHATELET - LES HALLES"]<-"CHATELET-LES HALLES"
+biens[biens=="CLUNY - LA SORBONNE"]<-"CLUNY-LA SORBONNE"
+biens[biens=="CORENTIN CARIOU"]<-"CORENTIN-CARIOU"
+biens[biens=="FRANKLIN D. ROOSEVELT"]<-"FRANKLIN-ROOSEVELT"
+biens[biens=="GONCOURT (HOPITAL-SAINT-LOUIS)"]<-"GONCOURT (HOPITAL SAINT-LOUIS)"
+biens[biens=="HOPITAL ROBERT-DEBRE"]<-"HOPITAL ROBERT DEBRE"
+biens[biens=="JAVEL - ANDRE CITROEN"]<-"JAVEL-ANDRE-CITROEN"
+biens[biens=="LA MOTTE-PICQUET - GRENELLE"]<-"LA MOTTE-PICQUET-GRENELLE"
+biens[biens=="MAGENTA"]<-"LA FAYETTE - DUNKERQUE"
+biens[biens=="MARX DORMOY"]<-"MARX-DORMOY"
+biens[biens=="NEUILLY - PORTE MAILLOT"]<-"PORTE MAILLOT - PALAIS DES CONGRES"
+biens[biens=="NOTRE-DAME-DE-LORETTE"]<-"NOTRE-DAME DE LORETTE"
+biens[biens=="PEREIRE - LEVALLOIS"]<-"PEREIRE"
+biens[biens=="PEREIRE (MARECHAL JUIN)"]<-"PEREIRE - MARECHAL JUIN"
+biens[biens=="PLACE MONGE (JARDIN DES PLANTES - ARENES DE LUTECE)"]<-"PLACE MONGE (JARDIN DES PLANTES)"
+biens[biens=="PONT-CARDINET"]<-"PONT CARDINET"
+biens[biens=="PONT DE L'ALMA"]<-"BOSQUET - RAPP"
+biens[biens=="PORTE DE PANTIN (PARC DE LA VILLETTE)"]<-"PORTE DE PANTIN - PARC DE LA VILLETTE"
+biens[biens=="PORTE DE SAINT-CLOUD (PARC DES PRINCES)"]<-"PORTE DE SAINT-CLOUD"
+biens[biens=="PORTE DE VERSAILLES (PARC DES EXPOSITIONS DE PARIS)"]<-"PORTE DE VERSAILLES - PARC DES EXPOSITIONS"
+biens[biens=="PORTE MAILLOT (PALAIS DES CONGRES)"]<-"PORTE MAILLOT - PALAIS DES CONGRES"
+biens[biens=="SAINT-SEBASTIEN - FROISSART"]<-"SAINT-SEBASTIEN-FROISSART"
+biens[biens=="SOLFERINO (MUSEE D'ORSAY)"]<-"SOLFERINO - BELLECHASSE"
+biens[biens=="STADE CHARLETY"]<-"STADE CHARLETY - PORTE DE GENTILLY"
+biens[biens=="TELEGRAPHE"]<-"PELLEPORT - BELLEVILLE"
+
+transport<-unique(c(biens$transport.0,biens$transport.1,biens$transport.2))
+sort(setdiff(transport,unique(station$Name)))
+```
+Note: On remarque bien que maintenant toutes les stations référencées dans les annonces possèdent une association dans le data.frame "station"
+
+### Ajout des coordonnées GPS des stations au data.frame "biens"
+
+On peut commencer par associer à chaque bien les coordonnées des stations les plus proches. Par exemple, "Latitude_transport.0" est la latitude de la première station de métro/RER référencée dans l'annonce, "Longitude_transport.1" est la longitude de la deuxième station de métro/RER référencée dans l'annonce, etc...
+
+```{r}
+# On intègre les coordonnées GPS des stations de l'annonce à notre data.frame "biens"
+
+colnames(station)[1]<-"transport.0"
+transport0<-merge(biens,station, by="transport.0")
+transport0<-transport0[order(transport0$transport.0),]
+
+colnames(station)[1]<-"transport.1"
+transport1<-merge(biens,station, by="transport.1")
+transport1<-transport1[order(transport1$transport.0),]
+
+colnames(station)[1]<-"transport.2"
+transport2<-merge(biens,station, by="transport.2")
+transport2<-transport2[order(transport2$transport.0),]
+
+biens<-biens[order(biens$transport.0),]
+biens<-cbind(biens,Latitude_transport.0=transport0$latitude,Longitude_transport.0=transport0$longitude,Latitude_transport.1=transport1$latitude,Longitude_transport.1=transport1$longitude,Latitude_transport.2=transport2$latitude,Longitude_transport.2=transport2$longitude)
+
+```
+
+### Ajout de la distance des biens aux stations au data.frame "biens"
+
+On a décidé de calculer la distance du bien aux stations de métro/RER pour déterminer si le fait que les stations de métro/RER soit éloignées ou proches à une incidence sur le prix. On peut déjà émettre l'hypothèse que cette distance ne devrait pas influée sur le prix puisqu'il existe énormément de station de métro/RER à Paris. Par conséquent, pour chaque bien il va forcément y avoir une station proche. 
+
+Cela sera à prouver lors de notre modélisation lorsqu'on décidera ou non de garder ces variables dans notre modèle final.
+
+```{r}
+#On intègre les distances des biens aux stations de métro/RER référencées dans l'annonce
+
+dist_metro0=c()
+dist_metro1=c()
+dist_metro2=c()
+
+for (i in seq(1, length(biens$code.postal))){
+    dist_metro0=c(dist_metro0,distHaversine(c(biens$lon[i],biens$lat[i]),c(biens$Longitude_transport.0[i],biens$Latitude_transport.0[i]), r=6378137))
+}
+
+
+
+distHaversine(c(2.270395,48.86509),c(2.269568,48.86309))
+
+for (i in seq(1, length(biens$code.postal))){
+    dist_metro1=c(dist_metro1,distHaversine(c(biens$lon[i],biens$lat[i]),c(biens$Longitude_transport.1[i],biens$Latitude_transport.1[i]), r=6378137))
+}
+
+for (i in seq(1, length(biens$code.postal))){
+    dist_metro2=c(dist_metro2,distHaversine(c(biens$lon[i],biens$lat[i]),c(biens$Longitude_transport.2[i],biens$Latitude_transport.2[i]), r=6378137))
+}
+
+dist_metro<-data.frame(dist_metro0,dist_metro1,dist_metro2)
+colnames(dist_metro)<-c("distance_station_0","distance_station_1","distance_station_2")
+
+biens<- cbind(biens,dist_metro)
+
+```
+
+### Ajout de la distance des biens aux monuments les plus visités de Paris 
+
+On enrichit le data.frame "biens" à l'aide des coordonnées GPS des monuments de Paris récoltées sur internet. Pour obtenir ces données il suffit de se rendre à l'addresse ("https://www.coordonnees-gps.fr/") et de rentrer le nom du monument pour obtenir la longitude et latitude.
+
+```{r}
+# On calcule la distance des biens à ces 11 monuments.
+
+monument<-read.csv("monuments_paris.csv",header= T,sep=",",encoding = "UTF-8")
+
+mon=c()
+dist_monu=data.frame()
+for (i in seq(1, length(biens$code.postal))){
+    mon=c()
+for (c in seq(1, length(monument$Nom))){
+  
+    mon=c(mon,distHaversine(c(biens$lon[i],biens$lat[i]), c(monument$Longitude[c],monument$Latitude[c]), r=6378137))
+  
+}
+ dist_monu<-rbind(dist_monu,mon)
+}
+colnames(dist_monu)<-monument$Nom
+
+biens<- cbind(biens,dist_monu)
+```
+
+### Ajout de la distance des biens à l'Université la plus proche au data.frame "biens"
+
+On enrichit le data.frame "biens" à l'aide des coordonnées GPS des principales universités de Paris récoltées sur internet. Pour obtenir ces données il suffit de se rendre à l'addresse ("https://www.coordonnees-gps.fr/") et de rentrer le nom de l'université pour obtenir la longitude et latitude.
+
+Dans ce cas, on ne calcule pas la distance des biens à toutes les universités mais la distance du biens à l'université la plus proche. On ajoute donc une seule colonne au data.frame
+
+```{r}
+# Lecture du fichier
+
+universite<-read.csv("université_paris.csv",header= T,sep=",",encoding = "UTF-8")
+
+# Calcule de la distance du bien pour chaque université puis sélection du minimum pour garder la distance à l'université la plus proche
+
+dist_uni=rep(0,124)
+for (i in seq(1, length(biens$code.postal))){
+    v=rep(0,7)
+for (c in seq(1, length(universite$Nom))){
+  
+    v[c]=distHaversine(c(biens$lon[i],biens$lat[i]), c(universite$Longitude[c],universite$Latitude[c]), r=6378137)
+}
+ dist_uni[i]=min(v)
+}
+
+biens<-cbind(biens,distance_université_plus_près=dist_uni)
+```
+
+### Transformation de la variable qualitative "type" 
+
+On a une variable qualitative qui donne le type de bien de l'annonce: appartement,maison,chambre,pièce,studio
+
+```{r}
+#On considère que les types "pièce" et "chambre" reflètent la même information, on associe "pièce" à "chambre"
+
+biens[biens=="pièce"]<-"chambre"
+
+#On rajoute quatres colonnes à gauche pour mettre la variable "type" qui est qualitative en 4 variable binaire
+
+app=c()
+stu=c()
+mai=c()
+cha=c()
+for (i in seq(1, length(biens$code.postal))){
+  if(biens$type[i]=="appartement") {app=c(app,1)} else {app=c(app,0)}
+  if(biens$type[i]=="studio") {stu=c(stu,1)} else {stu=c(stu,0)}
+  if(biens$type[i]=="maison") {mai=c(mai,1)} else {mai=c(mai,0)}
+  if(biens$type[i]=="chambre") {cha=c(cha,1)} else {cha=c(cha,0)}
+}
+
+biens<-cbind(appartement=app,studio=stu,maison=mai,chambre=cha,biens)
+```
+
+### Ajout d'une variable binaire sur les arrondissements
+
+On a choisit de retranscrire en variable binaire le fait que le bien est soit dans la première coronne de Paris (arrondissement de 1 à 11) ou dans la deuxième couronne (arrondissement de 12 à 20).
+
+```{r}
+
+#On choisit de mettre 0 lorsque le bien est dans l'hyper-centre et 1 sinon (i.e. 0 du 1er au onzième arrondissement)
+
+arr=c()
+for (i in seq(1, length(biens$code.postal))){
+  if(as.numeric(str_sub(biens$code.postal[i],-2))<12) {arr=c(arr,0)} else {arr=c(arr,1)}
+}
+
+biens<-cbind(biens,arrondissement=arr)
+
+```

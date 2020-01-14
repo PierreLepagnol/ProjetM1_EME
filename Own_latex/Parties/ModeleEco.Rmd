@@ -1,0 +1,24 @@
+---
+title: "Modele Eco"
+author: "PHILIPPOT LEPAGNOL"
+date: "13 janvier 2020"
+output: pdf_document
+---
+
+```{r}
+# On créé un premier modèle avec toutes les variables explicatives
+
+summary(lm(formula=biens$prix~biens$nb_chambres+biens$nb_photo+biens$surface+biens$nb_pieces+biens$distance_station_0+biens$distance_station_1+biens$distance_station_2+biens$`Cathédrale Notre-Dame de Paris`+biens$`Basilique du Sacré-Cœur de Montmartre`+biens$`Musée du Louvre`+biens$`Tour Eiffel`+biens$`Centre Pompidou`+biens$`Musée d’Orsay`+biens$`Cité des sciences et de l’industrie`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand site du Jardin des plantes`+biens$`Arc de triomphe`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre+biens$arrondissement))
+
+# On supprime les variables qui ont une p-value très élevée
+
+summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
+
+#Ensuite on ne garde que celles qui sont représentatives au seuil de 5%
+
+summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$distance_station_2+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
+
+
+
+```
+

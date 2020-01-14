@@ -1,0 +1,130 @@
+type,nb_photo,prix,code postal,transport/0,transport/1,transport/2,nb_pieces,nb_chambres,surface,lat,lon,url
+maison,12,4113500,75012,Porte de Charenton,Porte Dorée,Michel Bizot,11,8,252,48.833913,2.403578,/annonces/maison-paris-12e-r428800183
+maison,0,3450000,75007,Rue du Bac,Solférino (Musée d'Orsay),Sèvres - Babylone,6,3,180,48.855551,2.325712,/annonces/maison-paris-7e-r429100360
+appartement,13,1900000,75016,Avenue Henri Martin,Rue de la Pompe (Avenue Georges Mandel),La Muette,3,2,150,48.865091,2.270395,/annonces/appartement-paris-16e-r427300474
+appartement,13,1680000,75016,Michel-Ange - Auteuil,Église d'Auteuil,Chardon-Lagache,4,3,105,48.847766,2.264925,/annonces/appartement-paris-16e-r425701318
+appartement,10,1640000,75011,Ledru-Rollin,Faidherbe,Bastille,5,2,133,48.853111,2.376574,/annonces/appartement-paris-11e-75011-r430300830
+appartement,2,1620000,75017,Monceau,Malesherbes,Villiers,4,2,140,48.88112,2.310154,/annonces/appartement-paris-17e-r426101306
+appartement,18,1600000,75015,Ségur,Sèvres - Lecourbe,Cambronne,3,2,79,48.84748,2.308745,/annonces/appartement-paris-15e-75015-r430000549
+appartement,10,1550000,75008,Madeleine,Saint-Augustin,Miromesnil,3,1,88,48.871158,2.321501,/annonces/appartement-paris-8e-r429100353
+maison,12,1500000,75011,Faidherbe,Faidherbe - Chaligny,Charonne,5,3,119,48.852708,2.38112,/annonces/maison-paris-11e-r428000553
+appartement,12,1475400,75007,Pont de l'Alma,Alma - Marceau,Iéna,4,3,91,48.860654,2.299627,/annonces/appartement-paris-7e-75007-r429501323
+appartement,14,1395000,75006,Saint-Germain-des-Prés,Mabillon,Odéon,3,1,80,48.855946,2.337421,/annonces/appartement-paris-6e-r428700663
+appartement,12,1353000,75018,,,,5,4,134,48.892399,2.34498,/annonces/appartement-paris-18e-r426500411
+maison,12,1276000,75015,Volontaires,Cambronne,Ségur,5,3,94,48.84374,2.303247,/annonces/maison-paris-15e-r427200337
+appartement,0,1200000,75016,Mirabeau,Église d'Auteuil,Javel,4,3,96,48.845004,2.272372,/annonces/appartement-paris-16e-75016-r430400898
+appartement,8,1180000,75016,Mirabeau,Église d'Auteuil,Jasmin,4,2,91,48.849819,2.272133,/annonces/appartement-paris-16e-75016-r430400289
+appartement,11,1170000,75014,Jean Moulin,Porte d'Orléans (Général Leclerc),Alésia,5,3,107,48.825133,2.322426,/annonces/appartement-paris-14e-75014-r429701317
+appartement,9,1120000,75008,Franklin D. Roosevelt,Champs-Élysées - Clemenceau (Grand Palais),Saint-Philippe du Roule,4,2,90,48.868153,2.310164,/annonces/appartement-paris-8e-75008-r430401248
+appartement,12,1100000,75002,Sentier,Bonne Nouvelle,Grands Boulevards,4,2,91,48.868797,2.347503,/annonces/appartement-paris-2e-75002-r429300022
+appartement,12,1060000,75001,Châtelet - Les Halles,Louvre - Rivoli,Etienne Marcel,3,2,86,48.863457,2.343211,/annonces/appartement-paris-1er-75001-r430400833
+appartement,2,1030000,75005,Place Monge (Jardin des Plantes - Arènes de Lutèce),Jussieu,Cardinal Lemoine,3,2,67,48.843646,2.352927,/annonces/appartement-paris-5e-75005-r430000108
+appartement,10,998000,75017,Courcelles,Wagram,Pereire (Maréchal Juin),4,2,98,48.881442,2.301500,/annonces/appartement-paris-17e-75017-r430401249
+appartement,7,995000,75010,Jacques Bonsergent,République,Temple,3,1,83,48.869889,2.362645,/annonces/appartement-paris-10e-75010-r430401272
+appartement,14,995000,75010,Poissonnière,Gare du Nord,Gare de l'Est (Verdun),4,2,87,48.877018,2.352457,/annonces/appartement-paris-10e-r428600347
+appartement,14,988000,75017,Ternes,Charles de Gaulle - Étoile,Argentine,3,1,79,48.878654,2.29497,/annonces/appartement-paris-17e-75017-r429600742
+appartement,12,985000,75017,Argentine,Neuilly - Porte Maillot,Porte Maillot (Palais des Congrès),3,2,83,48.878108,2.289385,/annonces/appartement-paris-17e-r429101000
+appartement,12,982000,75020,Séverine,Porte de Bagnolet,Pelleport,4,3,106,48.866987,2.407953,/annonces/appartement-paris-20e-r424101614
+appartement,15,979000,75015,Charles Michels,Javel - André Citroën,Javel,3,2,85,48.846401,2.285016,/annonces/appartement-paris-15e-r427301700
+appartement,14,975000,75018,Porte de Saint-Ouen,Guy Môquet,Lamarck - Caulaincourt,4,3,105,48.895132,2.331591,/annonces/appartement-paris-18e-75018-r429400401
+appartement,14,970000,75015,Charles Michels,Javel - André Citroën,Javel,4,3,84,48.84474,2.282653,/annonces/appartement-paris-15e-75015-r429700380
+appartement,10,950000,75015,Vaugirard (Adolphe Chérioux),Convention,Volontaires,4,2,86,48.837032,2.302088,/annonces/appartement-paris-15e-r427301330
+appartement,8,950000,75013,Olympiades,Bibliothèque François Mitterrand,Chevaleret,4,3,89,48.82917,2.369248,/annonces/appartement-paris-13e-75013-r429901479
+appartement,11,945000,75013,Cité universitaire,Stade Charléty,Poterne des Peupliers,4,3,95,48.824417,2.343009,/annonces/appartement-paris-13e-75013-r430400382
+appartement,12,920000,75016,Mirabeau,Javel,Église d'Auteuil,3,2,73,48.845164,2.272605,/annonces/appartement-paris-16e-75016-r429901544
+appartement,3,915000,75015,Convention,Vaugirard (Adolphe Chérioux),Georges Brassens,4,3,84,48.836266,2.299659,/annonces/appartement-paris-15e-75015-r430400264
+appartement,11,910000,75116,Boissière,Kléber,Victor Hugo,2,1,56,48.869107,2.290209,/annonces/appartement-paris-16e-r428800204
+appartement,0,900000,75017,Porte de Champerret,Pereire (Maréchal Juin),Pereire - Levallois,2,1,74,48.882053,2.294,/annonces/appartement-paris-17e-75017-r430000325
+appartement,9,895300,75020,Gambetta,Pelleport,Porte de Bagnolet,4,3,87,48.864767,2.398592,/annonces/appartement-paris-20e-75020-r430300423
+appartement,10,870000,75016,Exelmans,Michel-Ange - Molitor,Porte d'Auteuil,3,2,71,48.844192,2.258627,/annonces/appartement-paris-16e-75016-r430300166
+appartement,11,860000,75020,Gambetta,Porte de Bagnolet,Pelleport,3,2,71,48.862092,2.401438,/annonces/appartement-paris-20e-75020-r429700047
+appartement,14,860000,75016,Exelmans,Porte de Saint-Cloud (Parc des Princes),Michel-Ange - Molitor,4,2,81,48.840642,2.257001,/annonces/appartement-paris-16e-75016-r430100678
+appartement,14,850000,75017,Ternes,Courcelles,Pereire (Maréchal Juin),4,2,86,48.879795,2.299484,/annonces/appartement-paris-17e-r426000519
+appartement,7,850000,75002,Bonne Nouvelle,Grands Boulevards,Sentier,3,2,59,48.870366,2.346400,/annonces/appartement-paris-2e-75002-r430401224
+appartement,10,840000,75002,Sentier,Bonne Nouvelle,Réaumur - Sébastopol,3,2,68,48.867427,2.347258,/annonces/appartement-paris-2e-75002-r430401004
+appartement,14,800000,75008,Saint-Philippe du Roule,George V,Franklin D. Roosevelt,3,2,62,48.872128,2.305361,/annonces/appartement-paris-8e-75008-r429600998
+appartement,4,800000,75016,Porte de Saint-Cloud (Parc des Princes),Exelmans,Michel-Ange - Molitor,4,2,77,48.838857,2.257576,/annonces/appartement-paris-16e-75016-r430400830
+appartement,11,795000,75116,,,,2,1,58,48.8531,2.24876,/annonces/appartement-paris-16e-75116-r429900086
+appartement,9,795000,75010,Château d'Eau,Jacques Bonsergent,Strasbourg - Saint-Denis,2,1,60,48.871317,2.356862,/annonces/appartement-paris-10e-75010-r430401154
+appartement,13,790000,75018,Blanche,Abbesses,Place de Clichy,2,1,44,48.885735,2.332774,/annonces/appartement-paris-18e-r428700711
+appartement,6,790000,75008,Miromesnil,Saint-Augustin,Gare Saint-Lazare,3,2,72,48.875519,2.317105,/annonces/appartement-paris-8e-75008-r430401034
+appartement,15,790000,75015,Falguière,Pasteur,Duroc,3,2,67,48.84367,2.315294,/annonces/appartement-paris-15e-r428800399
+appartement,7,790000,75019,Crimée,Riquet,Rosa Parks,5,3,101,48.891995,2.372586,/annonces/appartement-paris-19e-r429200405
+appartement,6,780000,75017,Brochant,Pont-Cardinet,Porte de Clichy,3,2,59,48.889728,2.318307,/annonces/appartement-paris-17e-75017-r430401149
+appartement,6,750000,75015,Cambronne,Ségur,La Motte-Picquet - Grenelle,3,2,60,48.847124,2.303719,/annonces/appartement-paris-15e-75015-r430401315
+appartement,8,705000,75020,Maraîchers,Porte de Montreuil,Buzenval,5,3,85,48.85351,2.405594,/annonces/appartement-paris-20e-75020-r429700209
+appartement,9,705000,75014,Plaisance,Pernety,Didot,3,2,61,48.831352,2.315964,/annonces/appartement-paris-14e-r427800027
+appartement,6,700000,75020,Adrienne Bolland,Saint-Fargeau,Séverine,5,3,92,48.871436,2.410167,/annonces/appartement-paris-20e-75020-r430401018
+appartement,11,695000,75018,Château Rouge,Marcadet - Poissonniers,Marx Dormoy,4,3,79,48.888447,2.35395,/annonces/appartement-paris-18e-75018-r429500407
+appartement,14,690000,75019,Place des Fêtes,Jourdain,Botzaris,2,1,50,48.877188,2.390606,/annonces/appartement-paris-19e-r428700517
+appartement,12,675000,75018,Guy Môquet,Porte de Saint-Ouen,La Fourche,3,2,62,48.892584,2.329975,/annonces/appartement-paris-18e-75018-r430401244
+appartement,12,670000,75013,Olympiades,Porte d'Ivry,Maryse Bastié,2,1,67,48.826003,2.369219,/annonces/appartement-paris-13e-r427401017
+appartement,12,660000,75013,Tolbiac,Corvisart,Poterne des Peupliers,3,2,65,48.825902,2.351572,/annonces/appartement-paris-13e-75013-r430401147
+appartement,9,650000,75011,Richard-Lenoir,Saint-Sébastien - Froissart,Chemin Vert,2,1,54,48.859696,2.369688,/annonces/appartement-paris-11e-75011-r430300608
+appartement,6,650000,75008,Liège,Europe,Place de Clichy,2,1,47,48.880307,2.327085,/annonces/appartement-paris-8e-75008-r429500320
+appartement,12,650000,75018,Barbès - Rochechouart,Château Rouge,Anvers,2,1,56,48.884905,2.347959,/annonces/appartement-paris-18e-limite-9e-r429900807
+appartement,0,650000,75015,Charles Michels,Commerce,Félix Faure,2,1,57,48.845242,2.288901,/annonces/appartement-paris-15e-75015-r430400952
+appartement,10,630000,75006,Vavin,Notre-Dame-des-Champs,Raspail,2,1,30,48.842305,2.330878,/annonces/appartement-paris-6e-75006-r430301232
+appartement,8,629000,75016,Ranelagh,Jasmin,La Muette,3,,55,48.855558,2.266278,/annonces/appartement-paris-16e-75016-r430400259
+appartement,12,610000,75008,Miromesnil,Saint-Augustin,Saint-Philippe du Roule,3,1,50,48.874415,2.315934,/annonces/appartement-paris-8e-r428000363
+appartement,11,608000,75019,Télégraphe,Hôpital Robert-Debré,Porte des Lilas,3,2,57,48.875713,2.400213,/annonces/appartement-paris-19e-75019-r430400561
+appartement,10,598000,75010,Colonel Fabien,Bolivar,Belleville,2,1,54,48.876077,2.371129,/annonces/appartement-paris-10e-75010-r430100239
+appartement,6,595000,75012,Ledru-Rollin,Faidherbe - Chaligny,Faidherbe,3,2,48,48.850536,2.378352,/annonces/appartement-paris-12e-75012-r430400369
+appartement,12,575000,75010,Château-Landon,Gare de l'Est (Verdun),Magenta,2,1,48,48.876576,2.362658,/annonces/appartement-paris-10e-r426700660
+appartement,5,575000,75012,Ledru-Rollin,Gare de Lyon,Bastille,2,1,59,48.848862,2.372856,/annonces/appartement-paris-12e-75012-r429600033
+appartement,14,560000,75019,Crimée,Corentin Cariou,Riquet,3,2,62,48.89208,2.378527,/annonces/appartement-paris-19e-r427900460
+studio,13,559000,75005,Saint-Sulpice,Mabillon,Rennes,1,0,37,48.849845,2.332655,/annonces/appartement-paris-5e-r424301094
+appartement,10,555000,75015,Pasteur,Volontaires,Sèvres - Lecourbe,3,2,47,48.840571,2.312921,/annonces/appartement-paris-15e-75015-r430400693
+appartement,7,550000,75005,,,,2,1,38,48.845501,2.34452,/annonces/appartement-paris-5e-r430400075
+appartement,7,549000,75015,Cambronne,Avenue Émile Zola,La Motte-Picquet - Grenelle,2,1,46,48.845631,2.300158,/annonces/appartement-paris-15e-75015-r429901116
+appartement,11,540000,75016,Michel-Ange - Auteuil,Jasmin,Église d'Auteuil,2,1,48,48.849969,2.266292,/annonces/appartement-paris-16e-75016-r429800426
+appartement,10,540000,75015,Desnouettes,Porte de Versailles (Parc des Expositions de Paris),Lourmel,3,2,54,48.834201,2.28566,/annonces/appartement-paris-15e-75015-r430200093
+appartement,8,530000,75009,Notre-Dame-de-Lorette,Le Peletier,Cadet,2,1,46,48.87633,2.339964,/annonces/appartement-paris-9e-r428700891
+appartement,14,530000,75013,Olympiades,Tolbiac,Maison Blanche,3,2,73,48.825964,2.364464,/annonces/appartement-paris-13e-75013-r429601072
+appartement,9,528000,75019,Jourdain,Pyrénées,Botzaris,3,2,46,48.876677,2.386124,/annonces/appartement-paris-19e-75019-r430400523
+appartement,6,525000,75013,Bibliothèque François Mitterrand,Maryse Bastié,Olympiades,2,1,43,48.827202,2.373478,/annonces/appartement-paris-13e-r427700212
+studio,10,519000,75016,Boissière,Iéna,Victor Hugo,1,1,37,48.866944,2.289735,/annonces/appartement-paris-16e-75016-r429800681
+appartement,6,513000,75005,Maubert - Mutualité,Cluny - La Sorbonne,Cardinal Lemoine,2,1,29,48.848916,2.347537,/annonces/appartement-paris-5e-75005-r430000699
+appartement,12,495000,75012,Porte de Charenton,Daumesnil (Félix Éboué),Michel Bizot,6,4,104,48.834883,2.396209,/annonces/appartement-paris-12e-75012-r429701453
+appartement,6,490000,75019,Ourcq,Laumière,Porte de Pantin (Parc de la Villette),3,2,53,48.885173,2.383916,/annonces/appartement-paris-19e-75019-r430400344
+appartement,8,488000,75015,Brancion,Porte de Vanves,Convention,3,2,45,48.833249,2.303936,/annonces/appartement-paris-15e-75015-r430401109
+appartement,6,470000,75020,Alexandre Dumas,Avron,Buzenval,3,2,44,48.855618,2.396737,/annonces/appartement-paris-20e-r430400245
+appartement,0,450000,75019,,,,2,1,50,48.8825,2.38261,/annonces/appartement-paris-19e-r427600137
+appartement,6,437500,75010,Jacques Bonsergent,Gare de l'Est (Verdun),Château-Landon,2,1,35,48.873759,2.363033,/annonces/appartement-paris-10e-75010-r430401093
+appartement,14,430000,75002,Strasbourg - Saint-Denis,Réaumur - Sébastopol,Bonne Nouvelle,3,2,36,48.868472,2.35313,/annonces/appartement-paris-2e-r428800225
+appartement,8,430000,75013,Chevaleret,Nationale,Campo-Formio,2,1,48,48.833027,2.366262,/annonces/appartement-paris-13e-75013-r430300872
+appartement,11,425000,75013,Les Gobelins,Censier - Daubenton,Glacière,2,1,38,48.836335,2.348551,/annonces/appartement-paris-13e-r428200163
+appartement,6,420000,75018,Château Rouge,Barbès - Rochechouart,Marcadet - Poissonniers,2,1,40,48.886979,2.349004,/annonces/appartement-paris-18e-75018-r430401039
+appartement,3,390000,75017,La Fourche,Brochant,Guy Môquet,2,1,35,48.888559,2.323827,/annonces/appartement-paris-17e-75017-r430400168
+appartement,6,385000,75011,Goncourt (Hôpital-Saint-Louis),République,Oberkampf,2,1,35,48.868593,2.369168,/annonces/appartement-paris-11e-75011-r430400540
+appartement,12,360000,75013,Tolbiac,Maison Blanche,Olympiades,2,1,41,48.825715,2.360282,/annonces/appartement-paris-13e-r428400237
+appartement,5,355000,75014,,,,2,1,33,48.832699,2.32491,/annonces/appartement-paris-14e-75014-r430400782
+studio,10,338000,75017,Ternes,Charles de Gaulle - Étoile,Argentine,1,0,24,48.878654,2.29497,/annonces/appartement-paris-17e-75017-r429600744
+appartement,10,332000,75010,Colonel Fabien,Bolivar,Louis Blanc,2,1,38,48.876847,2.371443,/annonces/appartement-paris-10e-75010-r430401296
+studio,5,325000,75006,Saint-Sulpice,Rennes,Saint-Placide,1,0,18,48.848956,2.331776,/annonces/appartement-paris-6e-r428900233
+appartement,5,320000,75020,Maraîchers,Porte de Montreuil,Marie de Miribel,2,1,30,48.854891,2.406257,/annonces/appartement-paris-20e-75020-r430400666
+studio,6,295000,75005,Jussieu,Cardinal Lemoine,Place Monge (Jardin des Plantes - Arènes de Lutèce),1,0,23,48.84693,2.353797,/annonces/appartement-paris-5e-75005-r430400322
+studio,4,270000,75017,Place de Clichy,La Fourche,Blanche,1,0,17,48.884015,2.326341,/annonces/appartement-paris-17e-75017-r430400316
+appartement,8,270000,75017,Place de Clichy,La Fourche,Rome,2,1,38,48.885258,2.325458,/annonces/appartement-paris-17e-r427800364
+studio,5,260000,75011,Faidherbe,Faidherbe - Chaligny,Charonne,1,0,20,48.852001,2.381712,/annonces/appartement-paris-11e-75011-r429901196
+studio,12,260000,75019,Pyrénées,Belleville,Buttes Chaumont,1,0,15,48.873305,2.381889,/annonces/appartement-paris-19e-75019-r429701019
+appartement,8,250000,75018,Porte de la Chapelle,Marx Dormoy,Colette Besson,2,1,26,48.894161,2.359563,/annonces/appartement-paris-18e-75018-r430400147
+studio,0,245000,75001,Etienne Marcel,Châtelet - Les Halles,Sentier,1,0,15,48.863858,2.345696,/annonces/appartement-paris-1er-75001-r430401011
+studio,12,240000,75018,Lamarck - Caulaincourt,Abbesses,Pigalle,1,0,18,48.887897,2.33776,/annonces/appartement-paris-18e-75018-r430400338
+studio,7,240000,75017,Neuilly - Porte Maillot,Porte Maillot (Palais des Congrès),Argentine,1,0,18,48.87829,2.285149,/annonces/appartement-paris-17e-75017-r430401036
+studio,9,234000,75011,République,Goncourt (Hôpital-Saint-Louis),Oberkampf,1,0,18,48.867965,2.367672,/annonces/appartement-paris-11e-75011-r430400992
+studio,12,225000,75020,Marie de Miribel,Porte de Montreuil,Maraîchers,1,0,25,48.856929,2.408963,/annonces/appartement-paris-20e-75020-r430401269
+studio,6,224000,75008,Saint-Philippe du Roule,Franklin D. Roosevelt,George V,1,0,15,48.872771,2.307243,/annonces/appartement-paris-8e-75008-r430400942
+studio,10,189000,75017,Guy Môquet,Porte de Saint-Ouen,Brochant,1,0,14,48.894203,2.327773,/annonces/appartement-paris-17e-r430400346
+appartement,3,189000,75017,Porte de Saint-Ouen,Guy Môquet,Porte de Clichy,2,1,16,48.896912,2.322711,/annonces/appartement-paris-17e-75017-r429800115
+studio,6,180000,75010,République,Jacques Bonsergent,Temple,1,1,13,48.869181,2.363642,/annonces/appartement-paris-10e-75010-r429500686
+studio,4,175000,75010,Jacques Bonsergent,Gare de l'Est (Verdun),Château d'Eau,1,0,14,48.873108,2.362478,/annonces/appartement-paris-10e-r430401288
+studio,5,175000,75010,Jacques Bonsergent,Gare de l'Est (Verdun),Château d'Eau,1,0,14,48.873108,2.362478,/annonces/appartement-paris-10e-75010-r430401283
+studio,5,162000,75018,Simplon,Porte de Clignancourt,Jules Joffrin,1,0,17,48.895618,2.348382,/annonces/appartement-paris-18e-r426900718
+studio,5,150000,75011,Charonne,Faidherbe,Rue des Boulets,1,0,11,48.853249,2.385224,/annonces/appartement-paris-11e-75011-r430401329
+studio,2,140000,75013,Place d'Italie,Corvisart,Les Gobelins,1,0,13,48.831744,2.352437,/annonces/appartement-paris-13e-75013-r430400297
+chambre,10,119000,75015,Pasteur,Falguière,Volontaires,1,0,8,48.840493,2.314787,/annonces/appartement-paris-15e-r429501039
+pièce,8,105000,75012,Daumesnil (Félix Éboué),Dugommier,Bel-Air,1,0,8,48.839945,2.39449,/annonces/appartement-paris-12e-75012-r430401167
+chambre,10,95000,75017,La Fourche,Place de Clichy,Blanche,1,1,8,48.88566,2.326035,/annonces/appartement-paris-17e-r420901371
+pièce,12,95000,75016,Jasmin,Ranelagh,Michel-Ange - Auteuil,1,1,7,48.851574,2.267744,/annonces/appartement-paris-75016-r187211182
+pièce,4,91000,75007,La Motte-Picquet - Grenelle,Ecole Militaire,Dupleix,1,1,8,48.853015,2.299384,/annonces/appartement-paris-7e-75007-r429901233

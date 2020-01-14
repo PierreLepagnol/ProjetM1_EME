@@ -1,0 +1,205 @@
+---
+output:
+  pdf_document: default
+---
+
+## Récuperation des Biens Immobiliers Bruts sous Python
+
+###  Problème
+Il n'y avait aucun jeu de donnée déjà formaté. Ainsi nous avons récupéré nos données en scrappant le site PAP[^1]. Ce site présente l'avantage d'être un site d'annonces n'appartenant pas à une agence donc le prix affiché n'est pas surévalué d'une marge d'une agence. 
+Nous nous sommes restreints aux biens en vente seule (pas de bien en viager, pas de bien location) et nous avons exclus les fonds de commerce, garage, péniche, chalet, mobil-homes, locaux en tout genre.
+
+Nous avons ainsi 99 appartements, 4 maisons, 21 studios, 2 chambres et 3 pièces.
+
+Nous avons récolté, pour chaque bien immobilier, le ```type```, le ``` prix```, le nombre de photo (```nb_photo```), les trois transports les plus proches selon PAP (```transport_#```), le nombre de pièces (```nb_pieces```), le nombre de chambre (```nb_chambre```), la surface habitable (```surface```), le code postal (```code_postal```), la latitude ```lat```,	La longitude ```lon```, l'url pour accéder à l'annonce (```url```).
+
+Pour réaliser le scrapping nous avons utilisé les modules suivants :
+
+* ```requests``` : Pour les requêtes HTTP.
+* ```unidecode``` : Pour la gestion des caractères spéciaux.
+* ```datetime``` : Pour dater nos fichiers.
+* ```ast``` : Pour parser une chaîne de caractère en dictionnaire Python.
+* ```json``` : Pour gérer les fichiers json
+* ```re``` : Pour la gestion des expression.
+* ```bs4 (BeautifulSoup)``` : Pour scrapper les pages web.
+
+Pour accéder aux données nous avons effectué une requête HTTP à l'adresse :
+
+```https://www.pap.fr/annonce/vente-immobiliere-paris-75-g439```
+
+Nous avons réparti le code en plusieurs fonctions: 
+
+```{python Fonction_Scrapping_0, eval=FALSE}
+# Initiation de la racine du site web
+site_main='https://www.pap.fr'
+
+# Création d'un set() contenant toutes les urls des biens
+URLset=GetURLSET(site_main,20)
+# Nettoyage du set() pour enlever les types de biens "intéréssants"
+# (Fond de commerces, locaux, péniches, etc).
+URLset=CleanIDset(URLset)
+
+#Création du jeu de données brut
+data=GetDetails(site_main,URLset)
+
+#Exportation de l'objet data (dict) dans un fichier .json 
+exportdata(data)  
+```
+
+```{python Fonction_Scrapping_1, eval=FALSE, echo=FALSE}
+# On importe les différents packages & bibliothèques
+import requests
+from bs4 import BeautifulSoup 
+from unidecode import unidecode
+import json
+import re
+import datetime
+import ast
+
+
+# Fonction prenant en paramètre une URL et retournant l'Objet BeautifulSoup associé.
+def GetHTMLPage(url_str):
+    try:
+        requete = requests.get(url_str,headers={'User-Agent':'Mozilla/5.0'})
+        html_file  = requete.content
+        soup = BeautifulSoup(html_file,'html.parser')
+        return soup
+    except :
+        print("Erreur")
+
+#Fonction :
+# paramètres : URL root +  nmax : nombre page à parser. 
+
+def GetURLSET(site_main,nmax):
+    res=set()
+    for number in range(1,nmax+1):
+        url_str=site_main+'/annonce/vente-immobiliere-paris-75-g439-'+str(number)
+        soup=GetHTMLPage(url_str)
+        temp=GetSet_URL_Bien(soup)
+        res=res|temp
+    return res
+
+
+def GetSet_URL_Bien(soup):
+    liste_hrefs=set()
+    spans_bien=soup.find_all('div',class_="search-list-item")
+    for item in spans_bien:
+        str_href=item.find('a').get('href')
+        liste_hrefs.add(str_href)        
+    return liste_hrefs
+
+#Fonction de filtre
+def condition_keep(string):
+    substring_list = ("/annonces/appartement-paris","/annonces/maison-paris")
+    if (string.startswith(substring_list)):
+        return True
+    else:
+        return False
+#Fonction de nettoyage de URLset. 
+def CleanIDset(URLset):
+    keep_set=set()
+    for item in URLset:
+        if(condition_keep(item)):
+            keep_set.add(item)    
+    return keep_set
+
+#Fonction de scrapping des informations pour un bien immobilier particulier
+def GetDetails(site_main,URLset):
+    res=[]
+    for url_detail in URLset:
+        url_str=site_main+url_detail
+        soup_ID = GetHTMLPage(url_str)
+        to_append=ScrapDetail(soup_ID)
+        to_append['url']=url_detail;
+        res.append(to_append)
+    return res
+
+```
+
+```{python Fonction_Scrapping_2, eval=FALSE, echo=FALSE}
+
+
+def Cleandataset(data):        
+    keys=['.','EUR le m']
+    for key in keys:
+        if key in data.keys():
+            del data[key]
+        else :continue            
+    return data
+
+def GetDetailsBien(div_desc,res):
+    patterns= [r'\D+']
+    
+    list_item_tag=div_desc.find(class_='item-tags')
+    list_item_tag=[unidecode(item.strong.text) for item in list_item_tag.find_all('li')]
+    for item in list_item_tag:     
+        for p in patterns:
+            matches= re.findall(p, item)
+        for match in matches:
+            res[unidecode(match).strip()]=format_list_tag(item)
+    res=Cleandataset(res)
+
+
+    return res
+
+
+def format_list_tag(item):
+    item=re.sub('m2','',item)
+    item=re.sub('[^\d]','',item)
+    return int(item)
+
+def ScrapDetail(soup):
+    res={}
+    type_bien=soup.find(class_='item-title').text
+    res['type']=type_bien.split()[1]
+    nb_photo=len(soup.find_all(class_='img-liquid owl-thumb-item'))
+    res['nb_photo']=nb_photo
+    
+    div_desc=soup.find('div',class_="item-description")
+#   Collecte du prix du bien
+    tarif=soup.find(class_='item-price').text
+    tarif=re.sub('[^\d]','',tarif)
+    res['prix']=tarif
+    
+#   Collecte du code postal
+    zipcode=div_desc.find('h2').text
+    zipcode= re.findall(r"(\b\d{5}\b)", zipcode)[0]
+    res['code postal']=zipcode
+##    Collecte des Stations de métro
+    list_station=div_desc.find_all(class_='item-transports')
+    
+    list_name_station=[]
+    for item in list_station :
+        to_append=item.find(class_='label')
+        if(type(to_append)!=type(None)):
+                list_name_station.append(to_append.text)
+
+    res['transport']=list_name_station
+
+##    Collecte des détails
+    GetDetailsBien(div_desc,res)
+##    Collecte des coordonées
+    GetCoord(soup,res)
+    return res
+
+def GetCoord(soup,res):
+#    print(carte_item)
+    carte_item=ast.literal_eval(carte_item['data-mappy'])
+    res['lat']=float(carte_item['center'][0])
+    res['lon']=float(carte_item['center'][1])
+    return res
+
+
+#Fonction d'exportation du dictionnaire : dict_data
+def exportdata(dict_data):
+    x = datetime.datetime.now()
+    x=x.strftime("%H-%M-%S")
+    with open('result-'+x+'.json', 'w') as fp:
+        json.dump(dict_data, fp)
+    return x
+    
+```
+
+Vous trouverez en annexe, le code complet.
+
+[^1]: @PAP

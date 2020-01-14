@@ -1,0 +1,60 @@
+---
+lang: fr-FR
+title: "Modélisation du prix d’un bien immobilier à Paris intramuros"
+subtitle: 'Mais dis-moi chérie, le prix du m² a vachement augmenté !'
+author:
+- Maxime PHILIPPOT
+- Pierre LEPAGNOL
+date: "`r Sys.Date()`"
+bibliography: bibliography.bib
+abstract: |
+  Nous avons voulu modéliser le prix d'un bien immobilier dans Paris. Pour pouvoir répondre à la question que beaucoup de monde se pose : "Pourquoi est-ce donc si cher ?". Ainsi pouvoir justifier un prix ou bien prédire pour des futurs biens pour dénicher les offres intéressantes à l'aide d'un algorithme reposant sur nos modèles.
+  Pour ce faire nous avons du créer notre propre dataset en récoltant nos données sur différents sites web.
+  
+  La seconde partie de notre travail fût la modélisation. Nous avons sélectionné nos variables de manière naïve, calculer le plus d'indicateurs (des distances, par exemple) qui soient indépendants les uns des autres.
+  Puis en mettant en oeuvre notre cours d'Econométrie nous avons simulé avec nos données.
+  Nous avons pu remarquer au long de l'étude que nous avons menée, la difficulté d'acquérir les données et parmi lesquelles : la position géographique des biens.
+  
+  Un de nos premiers résultats fût la non corrélation avec le nombre de photos d'une annonce immobilière.
+output: 
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+    
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
+knitr::opts_chunk$set(engine.path = list(
+  python = '/home/pierre/anaconda3/bin/python'
+))
+
+```
+
+# Création du dataset
+```{r, child='Parties/Scrapping.Rmd'}
+```
+
+```{r, child='Parties/Creation_DataSet.Rmd'}
+```
+
+# Statistique Descriptive
+```{r, child='Parties/Statdesc.Rmd'}
+```
+
+# Modèle Econométrique
+```{r, child='Parties/ModeleEco.Rmd'}
+```
+
+# Annexes
+## Code Python
+```{r getlabels, echo = FALSE}
+labs = knitr::all_labels()
+codes_python_vect=paste("Fonction_Scrapping",0:2,sep = "_")
+labs_python = labs[labs %in% codes_python_vect]
+```
+
+```{r allcodes_python, ref.label = labs_python, eval = FALSE}
+```
+
+# Références
