@@ -144,7 +144,7 @@ biens<-biens[-c(1,2,3,4,5),]
 
 ```
 
-On a remarqué un bien sans description du nombre de chambre. A l'aide de l'url renseigné dans le data.frame nous avons visité la page "https://www.pap.fr/annonces/appartement-paris-16e-75016-r430400259" correspondant au bien.
+On a remarqué un bien sans description du nombre de chambre. A l'aide de l'url renseigné dans le data.frame nous avons visité la page ```https://www.pap.fr/annonces/appartement-paris-16e-75016-r430400259``` correspondant au bien.
 
 Si on regarde la photo du plan sur l'annonce on remarque que le bien peut avoir 1 ou 2 chambres selon les besoins/envies de l'acheteur, on a décidé que ce bien possédais qu'une chambre à l'achat et que la salle à manger pouvait se transformer en chambre par la suite.
 
@@ -169,7 +169,7 @@ sort(setdiff(transport,unique(station$Name)))#on a 30 stations sur 198 qui n'ont
 
 #length(transport) #transport qui est l'ensemble des stations référencées dans les 124 biens
 ```
-Pour corriger ce problème, nous avons créé le fichier "result_r_station.csv" pour connaître le nom de toutes les stations de Paris ordonnées.  On a associé manuellement les nouveaux noms de station en mettant en évidence deux causes de ce problème.
+Pour corriger ce problème, nous avons créé le fichier ```result_r_station.csv``` pour connaître le nom de toutes les stations de Paris ordonnées.  On a associé manuellement les nouveaux noms de station en mettant en évidence deux causes de ce problème.
 
 La première cause venait d'une écriture différente dans les deux data.frame. Par exemple,"JAVEL - ANDRE CITROEN"  est devenu "JAVEL-ANDRE-CITROEN", "FRANKLIN D. ROOSEVELT" est devenu "FRANKLIN-ROOSEVELT" etc...
 
@@ -215,7 +215,8 @@ biens[biens=="TELEGRAPHE"]<-"PELLEPORT - BELLEVILLE"
 transport<-unique(c(biens$transport.0,biens$transport.1,biens$transport.2))
 sort(setdiff(transport,unique(station$Name)))
 ```
-Note: On remarque bien que maintenant toutes les stations référencées dans les annonces possèdent une association dans le data.frame "station"
+
+On remarque bien que maintenant toutes les stations référencées dans les annonces possèdent une association dans le data.frame "station"
 
 ### Ajout des coordonnées GPS des stations au data.frame "biens"
 
