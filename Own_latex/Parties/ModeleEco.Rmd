@@ -5,20 +5,115 @@ date: "13 janvier 2020"
 output: pdf_document
 ---
 
+```{r SETUP_RM, echo=FALSE}
+biens_stat_des<-biens[,c(1,2,3,4,6,7,12,13,14,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39)]
+# On retire les variables inutiles
+rm(stu,v,mai,transport,mon,i,lablist,app,arr,c,cha,dist_uni,dist_metro0,dist_metro1,dist_metro2)
+rm(universite,transport0,transport1,transport2,station,monument,prix_biens,dist_metro,dist_monu)
+```
+
+
+## Construction du Modèle "Optimal".
+
+Durant cette partie nous utiliserons le ```data.frame biens_stat_des```
+
+Extrayons dans un premier temps notre Y et notre X: le prix d'un bien (Y) et Les variables exogènes (X) en prenant soin de retirer la variable maison (par soucis du rang de la matrice de design).
+```{r echo=FALSE}
+Y=biens_stat_des$prix
+X=select(biens_stat_des,-c(prix,maison))
+```
+
+### Premier modèle "Naïf"
+Nous crééons un premier modèle avec toutes les variables explicatives.
 ```{r}
-# On créé un premier modèle avec toutes les variables explicatives
+lm_1=lm(Y~.,data=X)  
+summary(lm_1)
+```
+Nous pouvons noter que la variable la plus signicative est la ```surface```. Nous nous y attendions.
+Nous remarquons que les variables ```Chapelle Notre-Dame de la Médaille miraculeuse``` et ```Musée d’Orsay``` sont toutes deux significatives (au seuil de 5%), elles correspondent aux distances à ces deux monuments qui se trouvent dans le même arrondissement et tout deux plutôt au centre de Paris. Ainsi nous pouvons allons créer 3 sous-modèles l'un avec la moyenne des distance au monuments, un deuxième avec seulement ```Musée d’Orsay``` et un dernier avec seulement ```Chapelle Notre-Dame de la Médaille miraculeuse``` (toutes spécifications/modification égales par ailleurs).
 
-summary(lm(formula=biens$prix~biens$nb_chambres+biens$nb_photo+biens$surface+biens$nb_pieces+biens$distance_station_0+biens$distance_station_1+biens$distance_station_2+biens$`Cathédrale Notre-Dame de Paris`+biens$`Basilique du Sacré-Cœur de Montmartre`+biens$`Musée du Louvre`+biens$`Tour Eiffel`+biens$`Centre Pompidou`+biens$`Musée d’Orsay`+biens$`Cité des sciences et de l’industrie`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand site du Jardin des plantes`+biens$`Arc de triomphe`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre+biens$arrondissement))
+La présence d'une université proche (```distance_université_plus_près```) d'un bien ne semble pas avoir d'impact significatif (au seuil de 5%) sur le prix. Pareillement pour ```distance_station_0``` 
+Nous remarquons aussi que les variables ```arrondissement``` (qui décrit la zone) et ```nb_photo``` ne sont pas significatives (au seuil de 5%).
 
+De plus les variables ```surface```, ```nb_pieces``` et ```nb_chambres``` sont toutes les trois très corrélées positivements et portent une certaine redondance d'information (en effet, un bien avec une grande surface aura tendance à avoir plus de pièces et le nombre de pièce contient déjà le nombre de chambre).  
+Ainsi nous prenons allons remplacer ces trois variables par le rapport $\frac{surface}{nb_piece}$.
+```{r}
+# Création nouvelle variable Rapport
+biens_stat_des=cbind(biens_stat_des,Rapport=biens_stat_des$surface/biens_stat_des$nb_pieces)
+# Suppression de surface, nb_pieces, nb_chambres
+biens_stat_des = select(biens_stat_des, -c(surface,nb_pieces,nb_chambres))
+```
+
+#Création des 3 datasets pour les 3 sous-modèles
+```{r}
+## Dataset avec les moyennes ==> Ajout d'une variable Moyenne_ORSAY_CHAPELLE_var
+Moyenne_ORSAY_CHAPELLE_var=rowMeans(biens_stat_des[,c(15,17)])
+
+## Ajout au dataset adéquat: biens_stat_des_Moyenne
+biens_stat_des_Moyenne=cbind(biens_stat_des,Moyenne_ORSAY_CHAPELLE=Moyenne_ORSAY_CHAPELLE_var)
+
+## Suppression des autres variables 
+biens_stat_des_Moyenne=select(biens_stat_des_Moyenne,-c(`Musée d’Orsay`,`Chapelle Notre-Dame de la Médaille miraculeuse`))
+
+```
+
+```{r}
+## Dataset avec la distance au Musée d'Orsay ==> Suppression de Chapelle Notre-Dame de la Médaille miraculeuse
+biens_stat_des_ORSAY=select(biens_stat_des,-c(`Chapelle Notre-Dame de la Médaille miraculeuse`))
+
+## Dataset avec la distance à la Chapelle Notre-Dame de la Médaille miraculeuse ==> Suppression de Musée d'Orsay 
+biens_stat_des_Chapelle=select(biens_stat_des,-c(`Musée d’Orsay`))
+```
+
+
+## Selection du meilleur 2ème Modèle 
+### Procédure
+Nous allons donc fitter 3 sous-modèle et selectionner le sous-modèle ayant la vairable la plus significative.
+
+### Fit Sous-modèle 1 : ```Moyenne_ORSAY_CHAPELLE```
+```{r}
+X=select(biens_stat_des_Moyenne,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+lm_2_1=lm(Y~.,data=X)  
+summary(lm_2_1)
+```
+### Fit Sous-modèle 2 : ```Musée d'Orsay```
+```{r}
+X=select(biens_stat_des_ORSAY,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+lm_2_2=lm(Y~.,data=X)  
+summary(lm_2_2)
+```
+
+
+
+### Fit Sous-modèle 3 : ```Chapelle Notre-Dame de la Médaille miraculeuse```
+```{r}
+X=select(biens_stat_des_Chapelle,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+lm_2_3=lm(Y~.,data=X)  
+summary(lm_2_3)
+```
+On Remarque à l'issu du fitting de ces sous-modèles que la variable la plus pertinante est ```Musée d'Orsay```
+
+
+```{r}
 # On supprime les variables qui ont une p-value très élevée
 
-summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
+#summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
 
 #Ensuite on ne garde que celles qui sont représentatives au seuil de 5%
 
-summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$distance_station_2+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
-
-
-
+#summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$distance_station_2+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
 ```
+
+
+## Batteries de Tests.
+```{r}
+#dwtest(lm3_Rapport)
+#gqtest(lm3_Rapport)
+#biens_2=cbind(biens_2,Rapport=mean(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2))
+#biens_2=cbind(biens_2,Rapport=mean(c(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2)))
+##Modèle avec  Rapport
+#resettest(lm3,power = 2:3,type = 'regressor',data=biens_2)
+```
+
+
 

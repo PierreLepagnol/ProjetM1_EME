@@ -2,24 +2,34 @@
 \contentsline {section}{\numberline {1}Création du dataset}{2}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Récuperation des Biens Immobiliers Bruts sous Python}{2}{subsection.1.1}%
 \contentsline {subsubsection}{\numberline {1.1.1}Problème et Résolution}{2}{subsubsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.2}Création du data.frame \texttt {station} sous R}{3}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.2}Création du \texttt {data.frame} \texttt {station} sous R}{3}{subsection.1.2}%
 \contentsline {subsubsection}{\numberline {1.2.1}Lecture du jeu de données et sélection}{3}{subsubsection.1.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2}Nettoyage du jeu de données}{3}{subsubsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.3}Création du data.frame \texttt {biens} sous R}{4}{subsection.1.3}%
-\contentsline {subsubsection}{\numberline {1.3.1}Lecture du jeu de données et Sélection}{4}{subsubsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.2}Prise en compte des stations sans référencement}{5}{subsubsection.1.3.2}%
-\contentsline {subsubsection}{\numberline {1.3.3}Ajout des coordonnées GPS des stations au data.frame \texttt {biens}}{7}{subsubsection.1.3.3}%
-\contentsline {subsubsection}{\numberline {1.3.4}Ajout de la distance des biens aux stations au data.frame \texttt {biens}}{8}{subsubsection.1.3.4}%
+\contentsline {subsubsection}{\numberline {1.2.2}Nettoyage du jeu de données}{4}{subsubsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.3}Création du\texttt {data.frame\ biens}sous R}{5}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}Lecture du jeu de données et Sélection}{5}{subsubsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}Prise en compte des stations sans référencement}{6}{subsubsection.1.3.2}%
+\contentsline {subsubsection}{\numberline {1.3.3}Ajout des coordonnées GPS des stations au \texttt {data.frame\ biens}}{8}{subsubsection.1.3.3}%
+\contentsline {subsubsection}{\numberline {1.3.4}Ajout de la distance des biens aux stations au \texttt {data.frame\ biens}}{8}{subsubsection.1.3.4}%
 \contentsline {subsubsection}{\numberline {1.3.5}Ajout de la distance des biens aux monuments les plus visités de Paris}{9}{subsubsection.1.3.5}%
-\contentsline {subsubsection}{\numberline {1.3.6}Ajout de la distance des biens à l'Université la plus proche au data.frame \texttt {biens}}{9}{subsubsection.1.3.6}%
+\contentsline {subsubsection}{\numberline {1.3.6}Ajout de la distance des biens à l'Université la plus proche au \texttt {data.frame\ biens}}{9}{subsubsection.1.3.6}%
 \contentsline {subsubsection}{\numberline {1.3.7}Transformation de la variable qualitative ``type''}{10}{subsubsection.1.3.7}%
 \contentsline {subsubsection}{\numberline {1.3.8}Ajout d'une variable binaire sur les arrondissements}{10}{subsubsection.1.3.8}%
-\contentsline {section}{\numberline {2}Statistique Descriptive}{10}{section.2}%
-\contentsline {subsubsection}{\numberline {2.0.1}Résumé statistique}{10}{subsubsection.2.0.1}%
-\contentsline {subsubsection}{\numberline {2.0.2}Statistique descriptive de la variables expliquer}{12}{subsubsection.2.0.2}%
-\contentsline {subsubsection}{\numberline {2.0.3}Distance des biens aux monuments}{13}{subsubsection.2.0.3}%
-\contentsline {subsubsection}{\numberline {2.0.4}Matrice de variance-covariance}{14}{subsubsection.2.0.4}%
-\contentsline {section}{\numberline {3}Modèle Econométrique}{18}{section.3}%
-\contentsline {section}{\numberline {4}Annexes}{21}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Code Python}{21}{subsection.4.1}%
-\contentsline {section}{Références}{24}{section*.2}%
+\contentsline {section}{\numberline {2}Statistique Descriptive}{11}{section.2}%
+\contentsline {subsubsection}{\numberline {2.0.1}Résumé statistique du type de bien et nombre de photos}{11}{subsubsection.2.0.1}%
+\contentsline {subsubsection}{\numberline {2.0.2}Prix des biens de notre jeu de données}{11}{subsubsection.2.0.2}%
+\contentsline {subsubsection}{\numberline {2.0.3}Distance des biens aux stations}{12}{subsubsection.2.0.3}%
+\contentsline {subsubsection}{\numberline {2.0.4}Distance des biens aux monuments}{14}{subsubsection.2.0.4}%
+\contentsline {subsubsection}{\numberline {2.0.5}Prix des biens en fonction du type de biens}{16}{subsubsection.2.0.5}%
+\contentsline {subsubsection}{\numberline {2.0.6}Matrice de variance-covariance}{19}{subsubsection.2.0.6}%
+\contentsline {section}{\numberline {3}Modèles Econométrique}{21}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Construction du Modèle ``Optimal''.}{21}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Premier modèle ``Naïf''}{21}{subsubsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.2}Selection des du meilleur 2ème Modèle}{23}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Procédure}{23}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Fit Sous-modèle 1 : \texttt {Moyenne\_ORSAY\_CHAPELLE}}{23}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Fit Sous-modèle 2 : \texttt {Musée\ d\textquotesingle {}Orsay}}{24}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Fit Sous-modèle 3 : \texttt {Chapelle\ Notre-Dame\ de\ la\ Médaille\ miraculeuse}}{25}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Batteries de Tests.}{26}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Annexes}{27}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Code Python}{27}{subsection.4.1}%
+\contentsline {section}{Références}{30}{section*.2}%
