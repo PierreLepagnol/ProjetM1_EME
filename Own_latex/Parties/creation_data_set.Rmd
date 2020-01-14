@@ -33,11 +33,10 @@ Le fichier "positions-geographiques-des-stations-du-reseau-ratp.csv" provient du
 
 Pour accéder au jeu de données il suffit de le télécharger à l'addresse :
 
-https://dataratp2.opendatasoft.com/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/table/?disjunctive.stop_name
+```https://dataratp2.opendatasoft.com/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/table/?disjunctive.stop_name```
 
 ```{r}
-
-station<-read.csv("positions-geographiques-des-stations-du-reseau-ratp.csv",header= T,sep=";")
+station<-read.csv("../../Datasets/positions-geographiques-des-stations-du-reseau-ratp.csv",header= T,sep=";")
 
 # Ajout du code postal au data.frame et ordonner par code_postal
 
@@ -47,8 +46,8 @@ station$code_postal<-as.numeric(as.character(station$code_postal))
 
 # Mise en forme UTF-8 pour rectifier l'erreur d'écriture des stations avec des accents (les stations de métro)
 
-fwrite(station,"station_UTF-8.csv")
-station <- fread("station_UTF-8.csv",encoding = "UTF-8")
+fwrite(station,"../../Datasets/station_UTF-8.csv")
+station <- fread("../../Datasets/station_UTF-8.csv",encoding = "UTF-8")
 
 # Séparation de Longitude et Latitude en deux colonnes
 
@@ -112,12 +111,12 @@ station<-station%>%
 le fichier "result_python_annonces.csv" provient du scrapping des annonces effectué à l'aide de Python. Pour chaque bien (ou presque), nous avons de l'informations sur trois stations à proximité (métro,RER)
 
 ```{r}
-biens<-read.csv("result_python_annonces.csv",header= T,sep=",")
+biens<-read.csv("../../Datasets/result_python_annonces.csv",header= T,sep=",")
 
 # Mise en forme UTF-8 pour rectifier l'erreur d'écriture des stations avec des accents
 
-fwrite(biens,"biens_UTF-8.csv")
-biens <- fread("biens_UTF-8.csv",encoding = "UTF-8")
+fwrite(biens,"../../Datasets/biens_UTF-8.csv")
+biens <- fread("../../Datasets/biens_UTF-8.csv",encoding = "UTF-8")
 
 # Supprime les accents des stations de chaque biens pour uniformiser avec la même écriture que le data.frame "station"
 
@@ -285,7 +284,7 @@ On enrichit le data.frame "biens" à l'aide des coordonnées GPS des monuments d
 ```{r}
 # On calcule la distance des biens à ces 11 monuments.
 
-monument<-read.csv("monuments_paris.csv",header= T,sep=",",encoding = "UTF-8")
+monument<-read.csv("../../Datasets/monuments_paris.csv",header= T,sep=",",encoding = "UTF-8")
 
 mon=c()
 dist_monu=data.frame()
@@ -312,7 +311,7 @@ Dans ce cas, on ne calcule pas la distance des biens à toutes les universités 
 ```{r}
 # Lecture du fichier
 
-universite<-read.csv("université_paris.csv",header= T,sep=",",encoding = "UTF-8")
+universite<-read.csv("../../Datasets/université_paris.csv",header= T,sep=",",encoding = "UTF-8")
 
 # Calcule de la distance du bien pour chaque université puis sélection du minimum pour garder la distance à l'université la plus proche
 
