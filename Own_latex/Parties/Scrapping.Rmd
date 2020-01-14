@@ -5,7 +5,7 @@ output:
 
 ## Récuperation des Biens Immobiliers Bruts sous Python
 
-###  Problème
+###  Problème et Résolution
 Il n'y avait aucun jeu de donnée déjà formaté. Ainsi nous avons récupéré nos données en scrappant le site PAP[^1]. Ce site présente l'avantage d'être un site d'annonces n'appartenant pas à une agence donc le prix affiché n'est pas surévalué d'une marge d'une agence. 
 Nous nous sommes restreints aux biens en vente seule (pas de bien en viager, pas de bien location) et nous avons exclus les fonds de commerce, garage, péniche, chalet, mobil-homes, locaux en tout genre.
 

@@ -25,15 +25,15 @@ library(ggplot2)
 
 ```
 
-## Création du data.frame "station" sous R
+## Création du data.frame ```station``` sous R
 
 ### Lecture du jeu de données et sélection
 
-Le fichier "positions-geographiques-des-stations-du-reseau-ratp.csv" provient du jeu de données de la RATP. Ce fichier contient les coordonnées GPS et l'addresse des stations de bus, métro, RER, Tramway de la RATP. 
+Le fichier "positions-geographiques-des-stations-du-reseau-ratp.csv" provient du jeu de données de la RATP[^1.1]. Ce fichier contient les coordonnées GPS et l'addresse des stations de bus, métro, RER, Tramway de la RATP. 
 
-Pour accéder au jeu de données il suffit de le télécharger à l'addresse :
+[^1.1]:@RATP
 
-```https://dataratp2.opendatasoft.com/explore/dataset/positions-geographiques-des-stations-du-reseau-ratp/table/?disjunctive.stop_name```
+Vous trouverez à Références l'addresse pour télécharger le  jeu de donnée.
 
 ```{r}
 station<-read.csv("../../Datasets/positions-geographiques-des-stations-du-reseau-ratp.csv",header= T,sep=";")
@@ -104,7 +104,7 @@ station<-station%>%
 ```
 
 
-## Création du data.frame "biens" sous R
+## Création du data.frame ```biens``` sous R
 
 ### Lecture du jeu de données et Sélection
 
@@ -133,7 +133,7 @@ biens$transport.0<-str_to_upper(biens$transport.0)
 biens$transport.1<-str_to_upper(biens$transport.1)
 biens$transport.2<-str_to_upper(biens$transport.2)
 
-# Donne l'ensemble des stations présentes dans le jeu de données "biens"
+# Donne l'ensemble des stations présentes dans le jeu de données ```biens```
 
 transport<-unique(c(biens$transport.0,biens$transport.1,biens$transport.2))
 
@@ -160,10 +160,10 @@ biens$nb_chambres[is.na(biens$nb_chambres)]<-1
 
 ### Prise en compte des stations sans référencement
 
-Nous avons vu très rapidement que certaines stations référencées dans l'annonce ne correspondaient à aucune station du data.frame "station"
+Nous avons vu très rapidement que certaines stations référencées dans l'annonce ne correspondaient à aucune station du data.frame "station".
 
 ```{r}
-# On cherche donc les stations du data.frame "biens" qui n'ont pas de valeurs dans le data.frame "station"
+# On cherche donc les stations du data.frame ```biens``` qui n'ont pas de valeurs dans le data.frame "station"
 
 sort(setdiff(transport,unique(station$Name)))#on a 30 stations sur 198 qui n'ont pas de correspondance
 
@@ -216,14 +216,14 @@ transport<-unique(c(biens$transport.0,biens$transport.1,biens$transport.2))
 sort(setdiff(transport,unique(station$Name)))
 ```
 
-On remarque bien que maintenant toutes les stations référencées dans les annonces possèdent une association dans le data.frame "station"
+On remarque bien que maintenant toutes les stations référencées dans les annonces possèdent une association dans le data.frame ```station```
 
-### Ajout des coordonnées GPS des stations au data.frame "biens"
+### Ajout des coordonnées GPS des stations au data.frame ```biens```
 
-On peut commencer par associer à chaque bien les coordonnées des stations les plus proches. Par exemple, "Latitude_transport.0" est la latitude de la première station de métro/RER référencée dans l'annonce, "Longitude_transport.1" est la longitude de la deuxième station de métro/RER référencée dans l'annonce, etc...
+On peut commencer par associer à chaque bien les coordonnées des stations les plus proches. Par exemple, ```Latitude_transport.0``` est la latitude de la première station de métro/RER référencée dans l'annonce, ```Longitude_transport.1``` est la longitude de la deuxième station de métro/RER référencée dans l'annonce, etc...
 
 ```{r}
-# On intègre les coordonnées GPS des stations de l'annonce à notre data.frame "biens"
+# On intègre les coordonnées GPS des stations de l'annonce à notre data.frame ```biens```
 
 colnames(station)[1]<-"transport.0"
 transport0<-merge(biens,station, by="transport.0")
@@ -242,7 +242,7 @@ biens<-cbind(biens,Latitude_transport.0=transport0$latitude,Longitude_transport.
 
 ```
 
-### Ajout de la distance des biens aux stations au data.frame "biens"
+### Ajout de la distance des biens aux stations au data.frame ```biens```
 
 On a décidé de calculer la distance du bien aux stations de métro/RER pour déterminer si le fait que les stations de métro/RER soit éloignées ou proches à une incidence sur le prix. On peut déjà émettre l'hypothèse que cette distance ne devrait pas influée sur le prix puisqu'il existe énormément de station de métro/RER à Paris. Par conséquent, pour chaque bien il va forcément y avoir une station proche. 
 
@@ -280,7 +280,12 @@ biens<- cbind(biens,dist_metro)
 
 ### Ajout de la distance des biens aux monuments les plus visités de Paris 
 
-On enrichit le data.frame "biens" à l'aide des coordonnées GPS des monuments de Paris récoltées sur internet. Pour obtenir ces données il suffit de se rendre à l'addresse ("https://www.coordonnees-gps.fr/") et de rentrer le nom du monument pour obtenir la longitude et latitude.
+On enrichit le data.frame ```biens``` à l'aide des coordonnées GPS[^1.2] des monuments de Paris[^1.3] récoltées sur internet.
+
+[^1.2]: @CoordonneeGPS
+[^1.3]: @Monuments
+
+Pour obtenir ces données il suffit de se rendre à l'addresse en Références et de rentrer le nom du monument pour obtenir la longitude et latitude.
 
 ```{r}
 # On calcule la distance des biens à ces 11 monuments.
@@ -303,19 +308,21 @@ colnames(dist_monu)<-monument$Nom
 biens<- cbind(biens,dist_monu)
 ```
 
-### Ajout de la distance des biens à l'Université la plus proche au data.frame "biens"
+### Ajout de la distance des biens à l'Université la plus proche au data.frame ```biens```
 
-On enrichit le data.frame "biens" à l'aide des coordonnées GPS des principales universités de Paris récoltées sur internet. Pour obtenir ces données il suffit de se rendre à l'addresse ("https://www.coordonnees-gps.fr/") et de rentrer le nom de l'université pour obtenir la longitude et latitude.
+On enrichit le data.frame ```biens``` à l'aide des coordonnées GPS des principales universités de Paris[^1.4] récoltées sur internet. 
+
+[^1.4]: @UDP
+
+Pour obtenir ces données, il faut appliquer la même procédure que pour les monuments.
 
 Dans ce cas, on ne calcule pas la distance des biens à toutes les universités mais la distance du biens à l'université la plus proche. On ajoute donc une seule colonne au data.frame
 
 ```{r}
 # Lecture du fichier
-
 universite<-read.csv("../../Datasets/université_paris.csv",header= T,sep=",",encoding = "UTF-8")
 
 # Calcule de la distance du bien pour chaque université puis sélection du minimum pour garder la distance à l'université la plus proche
-
 dist_uni=rep(0,124)
 for (i in seq(1, length(biens$code.postal))){
     v=rep(0,7)
@@ -331,7 +338,7 @@ biens<-cbind(biens,distance_université_plus_près=dist_uni)
 
 ### Transformation de la variable qualitative "type" 
 
-On a une variable qualitative qui donne le type de bien de l'annonce: appartement,maison,chambre,pièce,studio
+On a une variable qualitative qui donne le type de bien de l'annonce: ```appartement```,```maison```,```chambre```,```pièce```,```studio```.
 
 ```{r}
 #On considère que les types "pièce" et "chambre" reflètent la même information, on associe "pièce" à "chambre"
@@ -359,7 +366,6 @@ biens<-cbind(appartement=app,studio=stu,maison=mai,chambre=cha,biens)
 On a choisit de retranscrire en variable binaire le fait que le bien est soit dans la première coronne de Paris (arrondissement de 1 à 11) ou dans la deuxième couronne (arrondissement de 12 à 20).
 
 ```{r}
-
 #On choisit de mettre 0 lorsque le bien est dans l'hyper-centre et 1 sinon (i.e. 0 du 1er au onzième arrondissement)
 
 arr=c()
@@ -368,5 +374,4 @@ for (i in seq(1, length(biens$code.postal))){
 }
 
 biens<-cbind(biens,arrondissement=arr)
-
 ```
