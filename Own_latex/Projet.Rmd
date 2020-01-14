@@ -15,7 +15,6 @@ abstract: |
   Puis en mettant en oeuvre notre cours d'Econométrie nous avons simulé avec nos données.
   Nous avons pu remarquer au long de l'étude que nous avons menée, la difficulté d'acquérir les données et parmi lesquelles : la position géographique des biens.
   
-  Un de nos premiers résultats fût la non corrélation avec le nombre de photos d'une annonce immobilière.
 output: 
   pdf_document:
     toc: yes

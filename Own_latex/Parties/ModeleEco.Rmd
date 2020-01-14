@@ -20,7 +20,8 @@ Durant cette partie nous utiliserons le ```data.frame biens_stat_des```
 Extrayons dans un premier temps notre Y et notre X: le prix d'un bien (Y) et Les variables exogènes (X) en prenant soin de retirer la variable maison (par soucis du rang de la matrice de design).
 ```{r echo=FALSE}
 Y=biens_stat_des$prix
-X=select(biens_stat_des,-c(prix,maison))
+biens_stat_des=select(biens_stat_des,-c(prix,maison))
+X=biens_stat_des
 ```
 
 ### Premier modèle "Naïf"
@@ -32,8 +33,8 @@ summary(lm_1)
 Nous pouvons noter que la variable la plus signicative est la ```surface```. Nous nous y attendions.
 Nous remarquons que les variables ```Chapelle Notre-Dame de la Médaille miraculeuse``` et ```Musée d’Orsay``` sont toutes deux significatives (au seuil de 5%), elles correspondent aux distances à ces deux monuments qui se trouvent dans le même arrondissement et tout deux plutôt au centre de Paris. Ainsi nous pouvons allons créer 3 sous-modèles l'un avec la moyenne des distance au monuments, un deuxième avec seulement ```Musée d’Orsay``` et un dernier avec seulement ```Chapelle Notre-Dame de la Médaille miraculeuse``` (toutes spécifications/modification égales par ailleurs).
 
-La présence d'une université proche (```distance_université_plus_près```) d'un bien ne semble pas avoir d'impact significatif (au seuil de 5%) sur le prix. Pareillement pour ```distance_station_0``` 
-Nous remarquons aussi que les variables ```arrondissement``` (qui décrit la zone) et ```nb_photo``` ne sont pas significatives (au seuil de 5%).
+La présence d'une université proche (```distance_université_plus_près```) d'un bien ne semble pas avoir d'impact significatif (au seuil de 5%) sur le prix. Pareillement pour ```distance_station_0```. 
+Nous remarquons aussi que les variables ```arrondissement``` (qui décrit la zone, ```nb_photo```,`Centre Pompidou`,`Cathédrale Notre-Dame de Paris`, `Cité des sciences et de l’industrie`, `Grand site du Jardin des plantes` et  ne sont pas non plus significatives (au seuil de 5%).
 
 De plus les variables ```surface```, ```nb_pieces``` et ```nb_chambres``` sont toutes les trois très corrélées positivements et portent une certaine redondance d'information (en effet, un bien avec une grande surface aura tendance à avoir plus de pièces et le nombre de pièce contient déjà le nombre de chambre).  
 Ainsi nous prenons allons remplacer ces trois variables par le rapport $\frac{surface}{nb_piece}$.
@@ -44,10 +45,17 @@ biens_stat_des=cbind(biens_stat_des,Rapport=biens_stat_des$surface/biens_stat_de
 biens_stat_des = select(biens_stat_des, -c(surface,nb_pieces,nb_chambres))
 ```
 
+```{r echo=FALSE}
+#Suppression des variables non significatives
+biens_stat_des=select(biens_stat_des,-c(arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`,`Centre Pompidou`,`Cathédrale Notre-Dame de Paris`, `Cité des sciences et de l’industrie`, `Grand site du Jardin des plantes`))
+
+```
+
+
 #Création des 3 datasets pour les 3 sous-modèles
 ```{r}
 ## Dataset avec les moyennes ==> Ajout d'une variable Moyenne_ORSAY_CHAPELLE_var
-Moyenne_ORSAY_CHAPELLE_var=rowMeans(biens_stat_des[,c(15,17)])
+Moyenne_ORSAY_CHAPELLE_var=rowMeans(biens_stat_des[,c(9,8)])
 
 ## Ajout au dataset adéquat: biens_stat_des_Moyenne
 biens_stat_des_Moyenne=cbind(biens_stat_des,Moyenne_ORSAY_CHAPELLE=Moyenne_ORSAY_CHAPELLE_var)
@@ -71,54 +79,62 @@ biens_stat_des_Chapelle=select(biens_stat_des,-c(`Musée d’Orsay`))
 Nous allons donc fitter 3 sous-modèle et selectionner le sous-modèle ayant la vairable la plus significative.
 ### Fit Sous-modèle 1 : ```Moyenne_ORSAY_CHAPELLE```
 ```{r}
-X=select(biens_stat_des_Moyenne,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+X=biens_stat_des_Moyenne
 lm_2_1=lm(Y~.,data=X)  
 summary(lm_2_1)
 ```
 ### Fit Sous-modèle 2 : ```Musée d'Orsay```
 ```{r}
-X=select(biens_stat_des_ORSAY,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+X=biens_stat_des_ORSAY
 lm_2_2=lm(Y~.,data=X)  
 summary(lm_2_2)
 ```
 ### Fit Sous-modèle 3 : ```Chapelle Notre-Dame de la Médaille miraculeuse```
 ```{r}
-X=select(biens_stat_des_Chapelle,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+X=biens_stat_des_Chapelle
 lm_2_3=lm(Y~.,data=X)  
 summary(lm_2_3)
 ```
 On remarque à l'issu du fitting de ces sous-modèles que la variable la plus pertinante est ```Musée d'Orsay```. Nous 	sélectionnons donc ce sous-modèle.
 
-
 # Raffinons le modèle
-```{r echo=FALSE}
-X=select(biens_stat_des_ORSAY,-c(prix,maison,arrondissement,nb_photo,distance_université_plus_près,distance_station_0,`Basilique du Sacré-Cœur de Montmartre`))
+
+```{r,echo=FALSE}
+X=biens_stat_des_ORSAY
 ```
 
-Nous allons supprimer les variables qui ont une p-value très élevée. C'est à dire : ```Cathédrale Notre-Dame de Paris```,```Centre Pompidou```,```distance_station_1```
-
+Nous créeons un 3 ème modèle, en retirant les variables ```distance_station_1```,```Arc de triomphe```,```Grand Palais```,```Tour Eiffel```.
 ```{r}
-X=select(X,-c(`Centre Pompidou`,`Cathédrale Notre-Dame de Paris`))
-
+X=select(X,-c(distance_station_1,`Arc de triomphe`,`Grand Palais`,`Tour Eiffel`))
 lm_3=lm(Y~.,data=X)  
 summary(lm_3)
-#summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
+```
+## Batteries de Tests
+### Test d'Homosédasticité
+#### Test de Breusch–Pagan
+```{r echo=FALSE}
+bptest(lm_3)
+```
 
-#Ensuite on ne garde que celles qui sont représentatives au seuil de 5%
+```{r}
 
-#summary(lm(formula=biens$prix~biens$surface+biens$`Musée du Louvre`+biens$`Musée d’Orsay`+biens$`Chapelle Notre-Dame de la Médaille miraculeuse`+biens$distance_station_2+biens$`Grand Palais`+biens$distance_université_plus_près+biens$appartement+biens$studio+biens$chambre))
+gqtest(lm_3)
 ```
 
 
-## Batteries de Tests.
+### Test d'autocorrélation d'ordre 1 : Drubin-Watson
 ```{r}
-#dwtest(lm3_Rapport)
-#gqtest(lm3_Rapport)
+dwtest(lm_3)
+```
+### Test de spécification du modèle : Test de Ramsey 
+```{r}
+resettest(lm_3,power = 2:3,type = 'regressor',data=biens_2)
+```
+
+
 #biens_2=cbind(biens_2,Rapport=mean(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2))
 #biens_2=cbind(biens_2,Rapport=mean(c(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2)))
 ##Modèle avec  Rapport
-#resettest(lm3,power = 2:3,type = 'regressor',data=biens_2)
-```
 
 
 
