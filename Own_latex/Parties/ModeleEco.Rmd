@@ -130,11 +130,3 @@ dwtest(lm_3)
 ```{r}
 resettest(lm_3,power = 2:3,type = 'regressor',data=biens_2)
 ```
-
-
-#biens_2=cbind(biens_2,Rapport=mean(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2))
-#biens_2=cbind(biens_2,Rapport=mean(c(biens$distance_station_0,biens$distance_station_1,biens$distance_station_2)))
-##Modèle avec  Rapport
-
-
-
